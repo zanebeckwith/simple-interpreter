@@ -28,4 +28,24 @@
         </div>
 </div>
 </body>
+<script src='parser.js'></script>
+<script src='display.js'></script>
+<script>
+        // When user hits enter button in text input box,
+        // read the input, parse it, add the formatted output
+        // to the output box, and clear the input box.
+        document.getElementById('input-box').onkeypress = function(key) {
+                if (key.keyCode === 13) {
+                        var input_elem = document.getElementById('input-box');
+                        var input_line = input_elem.value;
+                        var out_elem = document.getElementById('output-display');
+                        var new_elem = document.createElement('p');      
+                        new_elem.innerHTML = displayOutput(input_line, 
+                                        parseLine(input_line));
+                        out_elem.appendChild(new_elem);
+                        input_elem.value = "";
+                        return false;
+                }
+        }
+</script>
 </html>
