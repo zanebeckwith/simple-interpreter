@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang='en'>
+
+<head>
+        <title>How to waste time, but in a new language!</title>
+        <link rel='stylesheet' href='style.css'></link>
+</head>
+
+<body>
+<div id='interpreter'>
+        <h1>A Simple Desk Calculator</h1>
+        <div id='output-display'></div>
+
+        <form id='user-input'>
+                <input id='input-box' placeholder='Enter commands here' autofocus/>
+        </form>
+
+        <div id='explanation'>
+                Explanation:
+                <ul>
+                        <li>Hit enter to submit a command</li>
+                        <li>Define a variable: <code>[var name] = expression</code></li>
+                        <li>Operators: <code>+, -, *, /, ^</code></li>
+                        <li>Variable names may include upper- and lower-case letters,
+                                numbers, and underscores</li>
+                        <li>All numerical constants are saved as floating-point</li>
+                </ul>
+        </div>
+</div>
+</body>
+<script src='parser.js'></script>
+<script src='display.js'></script>
+<script>
+        // When user hits enter button in text input box,
+        // read the input, parse it, add the formatted output
+        // to the output box, and clear the input box.
+        document.getElementById('input-box').onkeypress = function(key) {
+                if (key.keyCode === 13) {
+                        var input_elem = document.getElementById('input-box');
+                        var input_line = input_elem.value;
+                        var out_elem = document.getElementById('output-display');
+                        var new_elem = document.createElement('p');      
+                        new_elem.innerHTML = displayOutput(input_line, 
+                                        parseLine(input_line));
+                        out_elem.appendChild(new_elem);
+                        input_elem.value = "";
+                        return false;
+                }
+        }
+</script>
+</html>
