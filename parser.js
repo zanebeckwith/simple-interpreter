@@ -22,36 +22,64 @@ Parse.Scanner = function(line) {
         // Set up simple finite automaton to classify tokens
         // and determine their representation,
         // and save each to the toks array.
-        // while not at end of line
-        //      if char is alpha
-        //              new_tok.type = 'ident';
-        //              while char isn't parens, op, space, or end-of-line
-        //                      add char to new_tok.rep
-        //                      advance char
-        //              add new_tok to toks
-        //      else if char is numeric or decimal
-        //              new_tok.type = 'num';
-        //              while char is numeric or decimal
-        //                      add char to new_tok.rep
-        //                      advance char
-        //              add new_tok to toks
-        //      else if char is l_parens
-        //              new_tok.type = 'lParens';
-        //              new_tok.rep = undefined;
-        //              advance char
-        //              add new_tok to toks
-        //      else if char is r_parens
-        //              new_tok.type = 'rParens';
-        //              new_tok.rep = undefined;
-        //              advance char
-        //              add new_tok to toks
-        //      else if char is op
-        //              new_tok.type = 'op';
-        //              new_tok.rep = char;
-        //              advance char
-        //              add new_tok to toks
-        //      else
-        //              report error
+        var pos = 0;    // Position in input line
+        var type;       // Buffer for new token type
+        var rep;        // Buffer for new token rep
+        while (pos < line.length) {
+                // if next char is a letter
+                if (/[a-zA-Z]/.test(line[pos])) {
+                        type = 'ident';
+                        rep = '';
+                        // while next char isn't an operator, parens, or space
+                        while (/[^+\-*\/()\s]/.test(line[pos])) {
+                                rep += line[pos];
+                                ++pos;
+                                if (pos === line.length) {
+                                        break;
+                                };
+                        };
+                // if next char is a number or decimal
+                } else if (/[\d\.]/.test(line[pos])) {
+                        type = 'num';
+                        rep = '';
+                        // while char is numeric or decimal
+                        while (/[\d\.]/.test(line[pos])) {
+                                rep += line[pos];
+                                ++pos;
+                                if (pos === line.length) {
+                                        break;
+                                };
+                        };
+                        rep *= 1;       // Convert to number
+                // if next char is a left-parenthesis
+                } else if (line[pos] === '(') {
+                        type = 'lParens';
+                        rep = undefined;
+                        ++pos;
+                // if next char is a right-parenthesis
+                } else if (line[pos] === ')') {
+                        type = 'rParens';
+                        rep = undefined;
+                        ++pos;
+                // if next char is an operator (+, -, *, /)
+                } else if (/[+\-*\/]/.test(line[pos])) {
+                        type = 'op';
+                        rep = line[pos];
+                        ++pos;
+                // if next char is whitespace
+                } else if (/[\s]/.test(line[pos])) {
+                        ++pos;
+                        continue;
+                // otherwise, don't know what the char is
+                } else {
+                        // report error
+                        ++pos;
+                        continue;
+                };
+
+                // Add new token to token stream
+                toks.unshift(Parse.Token(type, rep));
+        };
 
         // Function to view (but don't delete) next token
         that.peak = function() {
@@ -62,7 +90,7 @@ Parse.Scanner = function(line) {
         that.pop = function() {
                 return toks.pop();
         };
-
+        
         return that;
 };
 
