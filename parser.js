@@ -61,6 +61,11 @@ Parse.Scanner = function(line) {
                         type = 'rParens';
                         rep = undefined;
                         ++pos;
+                // if next char is an equals sign
+                } else if (line[pos] === '=') {
+                        type = 'equals';
+                        rep = undefined;
+                        ++pos;
                 // if next char is an operator (+, -, *, /)
                 } else if (/[+\-*\/]/.test(line[pos])) {
                         type = 'op';
