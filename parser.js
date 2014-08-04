@@ -22,6 +22,36 @@ Parse.Scanner = function(line) {
         // Set up simple finite automaton to classify tokens
         // and determine their representation,
         // and save each to the toks array.
+        // while not at end of line
+        //      if char is alpha
+        //              new_tok.type = 'ident';
+        //              while char isn't parens, op, space, or end-of-line
+        //                      add char to new_tok.rep
+        //                      advance char
+        //              add new_tok to toks
+        //      else if char is numeric or decimal
+        //              new_tok.type = 'num';
+        //              while char is numeric or decimal
+        //                      add char to new_tok.rep
+        //                      advance char
+        //              add new_tok to toks
+        //      else if char is l_parens
+        //              new_tok.type = 'lParens';
+        //              new_tok.rep = undefined;
+        //              advance char
+        //              add new_tok to toks
+        //      else if char is r_parens
+        //              new_tok.type = 'rParens';
+        //              new_tok.rep = undefined;
+        //              advance char
+        //              add new_tok to toks
+        //      else if char is op
+        //              new_tok.type = 'op';
+        //              new_tok.rep = char;
+        //              advance char
+        //              add new_tok to toks
+        //      else
+        //              report error
 
         // Function to view (but don't delete) next token
         that.peak = function() {
