@@ -94,6 +94,21 @@ Parse.Scanner = function(line) {
         return that;
 };
 
-function parseLine(input) {
-        return input;
+// Function to parse given token stream
+Parse.Parse = function(tokens) {
+        var output = '';
+        var t;
+        while (t = tokens.pop()) {
+                output += t.type
+                output += ' ';
+        };
+
+        return output;
 };
+
+// External-facing function to scan and parse input line
+function parseLine(input) {
+        var tokens = Parse.Scanner(input);
+        return Parse.Parse(tokens);
+};
+
