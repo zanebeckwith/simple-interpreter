@@ -7,6 +7,8 @@
 //
 //      These two lines are in two different divs,
 //      so they can be formatted in CSS separately.
+//
+//      TODO: Sanitize user-input before printing to screen!
 function displayOutput(input_line, output_value) {
         var formatted = "<div id='input-report'>";
         formatted += "&gt;&gt;&gt; ";
