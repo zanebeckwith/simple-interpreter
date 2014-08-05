@@ -89,6 +89,8 @@ Parse.Scanner = function(line) {
                 // Add new token to token stream
                 toks.unshift(Parse.Token(type, rep));
         };
+        // Indicate end of token stream
+        toks.unshift(Parse.Token('eof', undefined));
 
         // Function to view (but don't delete) next token
         that.peak = function() {
