@@ -1,5 +1,9 @@
 var Parse = {}; // File namespace
 
+// Global variables
+Parse.vm = VM.VirtualMachine(); // Virtual machine running in background
+Parse.symTab = {};              // Symbol table
+
 // Token type, for storing info on type and represention
 // of lexical tokens in input line.
 Parse.Token = function(type_in, rep_in) {
