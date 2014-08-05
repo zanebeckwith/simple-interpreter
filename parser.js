@@ -119,7 +119,7 @@ Parse.Parse = function(tokens) {
 
         if (Parse.line(tokens, code)) {
                 if (tokens.peak().type === 'eof') {
-                        return 5;
+                        return Parse.VM.run(code);
                 } else {
                         Parse.reportFail();
                         return false;
