@@ -115,14 +115,137 @@ Parse.Scanner = function(line) {
 
 // Function to parse given token stream
 Parse.Parse = function(tokens) {
-        var output = '';
-        var t;
-        while (t = tokens.pop()) {
-                output += t.type
-                output += ' ';
-        };
+        var code = [];  // Holds code to be executed on vm
 
-        return output;
+        if (Parse.line(tokens, code)) {
+                if (tokens.peak().type === 'eof') {
+                        return 5;
+                } else {
+                        Parse.reportFail();
+                        return false;
+                };
+        } else {
+                Parse.reportFail();
+                return false;
+        };
+};
+
+Parse.line = function(tokens, code) {
+        if (tokens.peak().type === 'def') {
+                tokens.pop();
+                tokens.pop();
+                tokens.pop();
+                return Parse.expr(tokens, code);
+        } else {
+                return Parse.expr(tokens, code);
+        };
+};
+
+Parse.expr = function(tokens, code) {
+        if (Parse.term(tokens, code)) {
+                return Parse.exprP(tokens, code);
+        } else {
+                Parse.reportFail();
+                return false;
+        };
+};
+
+Parse.term = function(tokens, code) {
+        if (Parse.factor(tokens, code)) {
+                return Parse.termP(tokens, code);
+        } else {
+                Parse.reportFail();
+                return false;
+        };
+};
+
+Parse.exprP = function(tokens, code) {
+        if (tokens.peak().rep === '+') {
+                tokens.pop();
+
+                if (Parse.term(tokens, code)) {
+                        return Parse.exprP(tokens, code);
+                } else {
+                        Parse.reportFail();
+                        return false;
+                }
+        } else if (tokens.peak().rep === '-') {
+                tokens.pop();
+
+                if (Parse.term(tokens, code)) {
+                        return Parse.exprP(tokens, code);
+                } else {
+                        Parse.reportFail();
+                        return false;
+                }
+        } else if (tokens.peak().type === 'rParens'
+                        || tokens.peak().type === 'eof') {
+                return true;
+        } else {
+                Parse.reportFail();
+                return false;
+        };
+};
+
+Parse.termP = function(tokens, code) {
+        if (tokens.peak().rep === '*') {
+                tokens.pop();
+
+                if (Parse.factor(tokens, code)) {
+                        return Parse.termP(tokens, code);
+                } else {
+                        Parse.reportFail();
+                        return false;
+                }
+        } else if (tokens.peak().rep === '/') {
+                tokens.pop();
+
+                if (Parse.factor(tokens, code)) {
+                        return Parse.termP(tokens, code);
+                } else {
+                        Parse.reportFail();
+                        return false;
+                }
+        } else if (tokens.peak().type === 'rParens' || 
+                        tokens.peak().rep === '+' ||
+                        tokens.peak().rep === '-' ||
+                        tokens.peak().type === 'eof') {
+                return true;
+        } else {
+                Parse.reportFail();
+                return false;
+        };
+};
+
+Parse.factor = function(tokens, code) {
+        if (tokens.peak().type === 'lParens') {
+                tokens.pop();
+
+                if (!Parse.expr(tokens, code)) {
+                        Parse.reportFail();
+                        return false;
+                }
+
+                if (tokens.peak().type !== 'rParens') {
+                        Parse.reportFail();
+                        return false;
+                }
+
+                tokens.pop();
+                return true;
+        } else if (tokens.peak().type === 'num' ||
+                        tokens.peak().type === 'ident') {
+                tokens.pop();
+                return true;
+        } else {
+                Parse.reportFail();
+                return false;
+        };
+};
+
+// Handle parsing errors
+Parse.reportFail = function() {
+        return 'Unable to parse input';
 };
 
 // External-facing function to scan and parse input line
@@ -131,3 +254,9 @@ function parseLine(input) {
         return Parse.Parse(tokens);
 };
 
+//         Parse.symTab.x = {};
+//         Parse.symTab.x.loc = Parse.vm.allocate(1);
+//         Parse.symTab.x.val = 20;
+//         Parse.vm.run([{op: 'storeImm', mem: Parse.symTab.x.loc, imm: Parse.symTab.x.val},
+//                       {op: 'stop'}
+//                       ]);
