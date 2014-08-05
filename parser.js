@@ -23,6 +23,8 @@ Parse.Scanner = function(line) {
 
         var toks = [];  // Internal representation of token stream
 
+        var keywords = {'def': undefined};
+
         // Set up simple finite automaton to classify tokens
         // and determine their representation,
         // and save each to the toks array.
@@ -32,7 +34,6 @@ Parse.Scanner = function(line) {
         while (pos < line.length) {
                 // if next char is a letter
                 if (/[a-zA-Z]/.test(line[pos])) {
-                        type = 'ident';
                         rep = '';
                         // while next char isn't an operator, parens, or space
                         while (/[^+\-*\/()\s]/.test(line[pos])) {
@@ -42,6 +43,13 @@ Parse.Scanner = function(line) {
                                         break;
                                 };
                         };
+                        // Check if it's a keyword
+                        if (rep in keywords) {
+                                type = rep;
+                                rep = undefined;
+                        } else {
+                                type = 'ident';
+                        }
                 // if next char is a number or decimal
                 } else if (/[\d\.]/.test(line[pos])) {
                         type = 'num';
