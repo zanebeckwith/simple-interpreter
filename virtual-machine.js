@@ -24,6 +24,9 @@ VM.VirtualMachine = function() {
                 // Run through code
                 for (pc = 0; (opCode = (memory[pc]).op) !== 'stop'; ++pc) {
                         switch (opCode) {
+                                case 'mov':
+                                        registers[memory[pc].reg2] = registers[memory[pc].reg1];
+                                        break;
                                 case 'load': 
                                         registers[memory[pc].reg] = memory[memory[pc].mem];
                                         break;
