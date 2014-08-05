@@ -12,6 +12,7 @@ VM.VirtualMachine = function() {
         var stack = 1e9;        // Stack pointer (heap can grow by 1e6
                                 //      before crashing into stack)
         var opCode;
+        var newReg = 0;         // Lowest unused register
 
         // Run given code.
         that.run = function(code) {
@@ -67,6 +68,17 @@ VM.VirtualMachine = function() {
         that.allocate = function(size) {
                 heap += size;
                 return heap - size;
+        };
+        
+        // Give an unused register
+        that.newRegister = function() {
+                return newReg++;
+        };
+
+        // Reset the registers
+        that.clearRegisters = function() {
+                registers = [];
+                newReg = 0;
         };
 
         return that;
