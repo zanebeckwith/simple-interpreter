@@ -8,7 +8,7 @@
 
 <body>
 <div id='interpreter'>
-        <h1>A Simple Desk Calculator</h1>
+        <h1>A Simple Interpreter</h1>
         <div id='output-display'></div>
 
         <form id='user-input'>
