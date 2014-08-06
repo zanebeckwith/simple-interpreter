@@ -27,6 +27,14 @@
                         <li>All numerical constants are saved as floating-point</li>
                 </ul>
         </div>
+        <div id='readme'>
+        <?php
+                include_once dirname(__FILE__) . '/packages/parsedown/Parsedown.php';
+                $Parsedown = new Parsedown();
+                $readme = file_get_contents(dirname(__FILE__) . '/README.md');
+                echo $Parsedown->text($readme);
+        ?>
+        </div>
 </div>
 </body>
 <script src='virtual-machine.js'></script>
