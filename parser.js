@@ -36,7 +36,7 @@ Parse.Scanner = function(line) {
                 if (/[a-zA-Z]/.test(line[pos])) {
                         rep = '';
                         // while next char isn't an operator, parens, or space
-                        while (/[^+\-*\/()\s]/.test(line[pos])) {
+                        while (/[^+\-*\/()=\s]/.test(line[pos])) {
                                 rep += line[pos];
                                 ++pos;
                                 if (pos === line.length) {
