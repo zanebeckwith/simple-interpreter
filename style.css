@@ -22,3 +22,8 @@ body {
         background-color: #eee;
         margin-bottom: 2em;
 }
+
+#readme {
+        margin-top: 5em;
+	width: 800px;
+}
